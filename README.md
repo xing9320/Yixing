@@ -30,3 +30,21 @@
 <Modal visible={isVisible}/>
     //Modal 组件是一种简单的覆盖在其他视图之上显示内容的方式
     //animationType 指定modal动画类型包括：slide 从底部滑入滑出；fade 淡入淡出；none 没有动画，直接蹦出来。
+
+绑定onPress的组件
+    //原生的反馈
+        <TouchableNativeFeedback
+         onPress = { () => {
+            setRippleColor(randomHexColor());
+            setRippleOverflow(!rippleOverflow);
+         }}
+         background={TouchableNativeFeedback.Ripple(rippleColor, rippleOverflow)}
+        >
+         <View>
+            <Text>文本</Text>
+         </View>
+        </TouchableNativeFeedback> 
+    //无反馈
+    <TouchableWithoutFeedback onPress={ ()=>{ Keyboard.dismiss() }}>
+        <MyComponent />
+    </TouchableWithoutFeedback>

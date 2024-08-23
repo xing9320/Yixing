@@ -1,14 +1,14 @@
 import { TextInput, StyleSheet } from 'react-native'
 
-const Input = (props) => {
+const Input = props => {
     return (
-        <TextInput
+        <TextInput {...props}
             style={{ ...styles.input, ...props.style }}
-            blurOnSumbit
+            keyboardType='number-pad'
             autoCapitalize='none'
             autoCorrect={false}
-            keyboardType='number-pad'
             maxLength={2}
+            blurOnSumbit
         />
     );
 };
