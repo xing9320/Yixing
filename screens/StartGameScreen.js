@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native'
+import { View, StyleSheet, Button, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native'
 import Card from '../components/Card';
 import Input from '../components/Input';
 import NumberContainer from '../components/NumberContainer'
+import TitleText from '../components/TitleText';
+import BodyText from '../components/BodyText';
 import colors from '../constants/colors';
 
 
@@ -50,7 +52,7 @@ const StartGameScreen = (props) => {
     if (confirmed) {
         confirmedOutput = (
             <Card style={styles.summaryContainer}>
-                <Text>Chosen Number:</Text>
+                <BodyText>Chosen Number:</BodyText>
                 <NumberContainer>{selectedNumber}</NumberContainer>
                 <Button title="START GAME" onPress={() => props.onStartGame(selectedNumber)}/>
             </Card>
@@ -60,10 +62,10 @@ const StartGameScreen = (props) => {
     return (
         <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
             <View style={styles.screen}>
-                <Text style={styles.title}>The Game Screen!</Text>
+                <TitleText style={styles.title}>Start a New Game!</TitleText>
                 <Card style={styles.inputContainer}>
                     <View style={styles.inputContainer}>
-                        <Text>Select a Number</Text>
+                        <BodyText>Select a Number</BodyText>
                         <Input style={styles.input} onChangeText={inputText => numberInputhandler(inputText)} defaultValue={enteredValue} />
                         <View style={styles.buttonContainer}>
                             <View style={styles.button}>
@@ -91,6 +93,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         marginVertical: 10,
+        fontFamily: 'open-sans-bold'
     },
     inputContainer: {
         width: 300,
