@@ -2,18 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-//import AppLoading from 'expo-app-loading';
 import Header from './components/Header';
 import StartGameScreen from './screens/StartGameScreen';
 import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
-
-const fetchFonts = () => {
-  return Font.loadAsync({
-    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
-    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
-  })
-}
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,7 +17,10 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        await fetchFonts;
+        await Font.loadAsync({
+          'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+          'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
+        });
         await new Promise(resolve => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);
@@ -41,6 +36,7 @@ export default function App() {
       await SplashScreen.hideAsync();
     }
   }, [dataLoaded]);
+
 
   if (!dataLoaded) {
     return null;
@@ -75,7 +71,7 @@ export default function App() {
   }
 
   return (
-    <View style={styles.screen} onLayOutRootView={onLayOutRootView}>
+    <View style={styles.screen} onLayout={onLayOutRootView}>
       <Header title="Guess a Number" />
       {content}
     </View>
