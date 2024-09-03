@@ -17,7 +17,6 @@ export default function App() {
   useEffect(() => {
     async function prepare() {
       try {
-        //await SplashScreen.preventAutoHideAsync();
         await Font.loadAsync({
           'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
           'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
@@ -37,6 +36,7 @@ export default function App() {
       await SplashScreen.hideAsync();
     }
   }, [dataLoaded]);
+
 
   if (!dataLoaded) {
     return null;
@@ -71,7 +71,7 @@ export default function App() {
   }
 
   return (
-    <View style={styles.screen} onLayOutRootView={onLayOutRootView}>
+    <View style={styles.screen} onLayout={onLayOutRootView}>
       <Header title="Guess a Number" />
       {content}
     </View>
