@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Alert } from 'react-native';
-
+import { Ionicons } from '@expo/vector-icons';
 import NumberContainer from "../components/NumberContainer";
 import Card from "../components/Card";
 import TitleText from "../components/TitleText";
@@ -24,17 +24,17 @@ const StartGameScreen = props => {
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
 
-    const {userChoice, OnGameOver} = props;
+    const { userChoice, OnGameOver } = props;
 
-useEffect(() => {
-    if (currentGuess === props.userChoice) {
-        props.onGameOver(rounds);
-    }
-},[currentGuess,userChoice]);
+    useEffect(() => {
+        if (currentGuess === props.userChoice) {
+            props.onGameOver(rounds);
+        }
+    }, [currentGuess, userChoice]);
 
     const nextGuessHandler = direction => {
         if (
-            (direction === 'lower' && currentGuess < props.userChoice) || 
+            (direction === 'lower' && currentGuess < props.userChoice) ||
             (direction === 'greater' && currentGuess > props.userChoice)
         ) {
             Alert.alert('Don\'t lie!', 'You know that this is wrong...', [
@@ -57,8 +57,12 @@ useEffect(() => {
             <TitleText style={DefalultStyles.title}>Opponent's Guess</TitleText>
             <NumberContainer>{currentGuess}</NumberContainer>
             <Card style={styles.buttonContainer}>
-                <MainButton title='LOWER' onPress={nextGuessHandler.bind(this, 'lower')} >LOWER</MainButton>
-                <MainButton title='GREATER' onPress={nextGuessHandler.bind(this, 'greater')} >GREATER</MainButton>
+                <MainButton title='LOWER' onPress={nextGuessHandler.bind(this, 'lower')} >
+                    <Ionicons name="remove" size={24} color='white' />
+                </MainButton>
+                <MainButton title='GREATER' onPress={nextGuessHandler.bind(this, 'greater')} >
+                    <Ionicons name="add" size={24} color='white' />
+                </MainButton>
             </Card>
         </View>
     )
