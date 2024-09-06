@@ -27,13 +27,25 @@ const renderListItem = (listLength, itemData) => (
 );
 
 const StartGameScreen = props => {
-    const initialGuess = generateRandomBetween(1, 100, props.userChoice)
+    const initialGuess = generateRandomBetween(1, 100, props.userChoice);
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
+    const [availableDeviceWidth, setAvailableDeviceWidth,] = useState(Dimensions.get('window').width);
+    const [availableDeviceHeight, setAvailableDeviceHeight,] = useState(Dimensions.get('window').height);
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
 
     const { userChoice, onGameOver } = props;
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setAvailableDeviceWidth(Dimensions.get('window').width);
+            setAvailableDeviceHeight(Dimensions.get('window').height);
+        };
+        const subscription = Dimensions.addEventListener('change', updateLayout);
+        return () => subscription?.remove();
+    });
+
 
     useEffect(() => {
         if (currentGuess === props.userChoice) {
@@ -62,9 +74,40 @@ const StartGameScreen = props => {
         //setRounds(curRounds => curRounds + 1);
     };
 
+    let listContainerStyle = styles.listContainer;
+
+    if (availableDeviceWidth < 350) {
+        listContainerStyle = styles.listContainerBig;
+    }
+
+    if (availableDeviceHeight < 500) {
+        return (
+            <View style={styles.screen}>
+                <TitleText style={DefalultStyles.title}>Opponent's Guess</TitleText>
+                <View style={styles.controls}>
+                    <MainButton title='LOWER' onPress={nextGuessHandler.bind(this, 'lower')} >
+                        <Ionicons name="remove" size={24} color='white' />
+                    </MainButton>
+                    <NumberContainer>{currentGuess}</NumberContainer>
+                    <MainButton title='GREATER' onPress={nextGuessHandler.bind(this, 'greater')} >
+                        <Ionicons name="add" size={24} color='white' />
+                    </MainButton>
+                </View>
+                <View style={styles.listContainer}>
+                    <FlatList
+                        keyExtractor={(item) => item}
+                        data={pastGuesses}
+                        renderItem={renderListItem.bind(this, pastGuesses.length)}
+                        ontentContainerStyle={styles.list}
+                    />
+                </View>
+            </View>
+        )
+    };
     return (
         <View style={styles.screen}>
             <TitleText style={DefalultStyles.title}>Opponent's Guess</TitleText>
+            <View style={styles.controls}></View>
             <NumberContainer>{currentGuess}</NumberContainer>
             <Card style={styles.buttonContainer}>
                 <MainButton title='LOWER' onPress={nextGuessHandler.bind(this, 'lower')} >
@@ -78,7 +121,7 @@ const StartGameScreen = props => {
                 {/* <ScrollView contentContainerStyle={styles.list}>
                 {pastGuesses.map((guess, index) => (renderListItem(guess, pastGuesses.length - index)))}
             </ScrollView> */}
-                <FlatList 
+                <FlatList
                     keyExtractor={(item) => item}
                     data={pastGuesses}
                     renderItem={renderListItem.bind(this, pastGuesses.length)}
@@ -86,7 +129,7 @@ const StartGameScreen = props => {
                 />
             </View>
         </View>
-    )
+    );
 };
 
 const styles = StyleSheet.create({
@@ -104,7 +147,17 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
-        width: Dimensions.get('window').width > 300 ? '60%' : '80%'
+        width: '60%'
+    },
+    listContainerBig: {
+        flex: 1,
+        width: '80%'
+    },
+    controls: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        width: '80%'
     },
     list: {
         flexGrow: 1,
