@@ -1,7 +1,16 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import {View, Text,Button, StyleSheet} from 'react-native';
 
+import { CATEGORIES } from '../data/dummy-data';
+
 const CategoryMealsScreen = (props) => {
+    const catId = props.route.params.categoryId;
+
+    const selectedCategory = CATEGORIES.find(cat => cat.id === catId);
+
+    useEffect(() => {
+        props.navigation.setOptions({title: selectedCategory.title})
+    },[props.navigation])
     return (
         <View style={ styles.screen}>
         <Text>The Category Meals Screen!</Text>
@@ -9,6 +18,7 @@ const CategoryMealsScreen = (props) => {
         </View>
     )
 }
+
 
 const styles = StyleSheet.create({
     screen: {
