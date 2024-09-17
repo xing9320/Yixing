@@ -1,13 +1,9 @@
+import './gesture-handler';
 import React, { useState, useEffect, useCallback } from 'react'
-//import { View, Text } from 'react-native';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import MealsNavigator from './navigation/MealsNavigator';
 import { NavigationContainer } from '@react-navigation/native';
-//import { createNativeStackNavigator } from '@react-navigation/native-stack';
-//import CategoriesScreen from './screens/CategoriesScreen';
-//import CategoryMealsScreen from './screens/CategoryMealsScreen';
-//import MealDetailScreen from './screens/MealDetailScreen';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,8 +13,6 @@ const fetchFonts = () => {
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
   });
 }
-
-//const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [fontLoaded, setFontLoaded] = useState(false);

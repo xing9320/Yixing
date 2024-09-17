@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, Button, StyleSheet, Platform } from 'react-native';
-//import { Ionicons } from '@expo/vector-icons';
 
 import { MEALS } from '../data/dummy-data';
-//import Colors from '../constans/Colors';
 
 const MealDetailScreen = (props) => {
     const mealId = props.route.params.mealId;
@@ -17,7 +15,7 @@ const MealDetailScreen = (props) => {
     return (
         <View style={styles.screen}>
             <Text>The Meal Detail Screen!</Text>
-            <Button title="Bo Back to Categories" onPress={() => props.navigation.popToTop()} />
+            <Button title="Bo Back!" onPress={() => props.navigation.popToTop()} />
         </View>
     )
 }
