@@ -12,30 +12,37 @@ import MealDetailScreen from '../screens/MealDetailScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import FiltersScreen from '../screens/FiltersScreen'
 import Colors from '../constans/Colors';
-import HeaderButton from '../components/HeaderButton';
-//import { NavigationContainer } from '@react-navigation/native';
+import HeaderButton from '../components/HeaderButton'
 
 enableScreens();
+
+const defaultStackNavOptions = {
+    headerMode: 'screen',
+    headerStyle: { backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : 'white' },
+    headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+}
 
 const Stack = createNativeStackNavigator();
 
 function MealsNavigator() {
     return (
-        <Stack.Navigator 
-            screenOptions={{
-                headerMode: 'screen',
-                headerStyle: { backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : 'white' },
-                headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
-                
-            }}
+        <Stack.Navigator
+            screenOptions={defaultStackNavOptions}
         >
             <Stack.Screen
                 name="Categories"
                 component={CategoriesScreen}
-                options={{
-                    title: 'Meal Categories',
-
-                }}
+                options={({ navigation }) => ({
+                    title: 'Meal Category',
+                    headerLeft: () => (
+                        <HeaderButton title="Menu" onPress={() => { navigation.toggleDrawer() }}>
+                            <Ionicons
+                                name="menu"
+                                size={25}
+                                color={Platform.OS === 'android' ? 'white' : Colors.primaryColor}
+                            />
+                        </HeaderButton>),
+                })}
             />
             <Stack.Screen name="CategoryMeals" component={CategoryMealsScreen} />
             <Stack.Screen
@@ -59,20 +66,23 @@ function MealsNavigator() {
 function FavNavigator() {
     return (
         <Stack.Navigator initialRouteName="FavoritesStack"
-            screenOptions={{
-                headerMode: 'screen',
-                headerStyle: { backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : 'white' },
-                headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
-                headerBackTitleVisible: false
-            }}
+            screenOptions={defaultStackNavOptions}
         >
             <Stack.Screen
                 name="FavoritesStack"
                 component={FavoritesScreen}
-                options={{
+                options={({ navigation }) => ({
                     title: 'Your Favorites',
+                    headerLeft: () => (
+                        <HeaderButton title="Menu" onPress={() => { navigation.toggleDrawer() }}>
+                            <Ionicons
+                                name="menu"
+                                size={25}
+                                color={Platform.OS === 'android' ? 'white' : Colors.primaryColor}
+                            />
+                        </HeaderButton>),
 
-                }}
+                })}
             />
             <Stack.Screen
                 name="MealDetail"
@@ -86,7 +96,9 @@ const Tab = createBottomTabNavigator();
 
 function MealsFavTabNavigator() {
     return (
-        <Tab.Navigator screenOptions={{ headerShown: false, tabBarActiveTintColor: Colors.accentColor }}>
+        <Tab.Navigator screenOptions={{ headerShown: false, tabBarActiveTintColor: Colors.accentColor,
+            tabBarLabelStyle: { fontFamily: 'open-sans-bold'}
+         }}>
             <Tab.Screen name='Meals' component={MealsNavigator}
                 options={{
                     tabBarIcon: ({ color }) => (
@@ -103,19 +115,57 @@ function MealsFavTabNavigator() {
     )
 }
 
+function FiltersNavigator() {
+    return (
+        <Stack.Navigator initialRouteName="FiltersStack"
+            screenOptions={defaultStackNavOptions}
+        >
+            <Stack.Screen
+                name="FiltersStack"
+                component={FiltersScreen}
+                options={({ navigation, route }) => ({
+                    title: 'Filter',
+                    headerLeft: () => (
+                        <HeaderButton title="Menu" onPress={() => { navigation.toggleDrawer() }}>
+                            <Ionicons
+                                name="menu"
+                                size={25}
+                                color={Platform.OS === 'android' ? 'white' : Colors.primaryColor}
+                            />
+                        </HeaderButton>),
+                        headerRight: () => (
+                            <HeaderButton title="SaveFilter" onPress={() => {
+                                route.params.save()
+                                //console.log("save filter", route.params.save())
+                            }}>
+                                <Ionicons
+                                    name="save"
+                                    size={23}
+                                    color={Platform.OS === 'android' ? 'white' : Colors.primaryColor} />
+                            </HeaderButton>
+                        )
+
+                })}
+            />
+        </Stack.Navigator>
+    )
+}
+
 const Drawer = createDrawerNavigator();
 
 function MainNavigator() {
     return (
-        <Drawer.Navigator >
-            <Drawer.Screen name='MealsFav' component={MealsFavTabNavigator}/>
-            <Drawer.Screen name='Filters' component={FiltersScreen}
-                options={{
-                    title: 'Filter Meals',
-                    drawerStyle: { backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : 'white' },
-                    drawerInactiveTintColorTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
-
-                }} />
+        <Drawer.Navigator initialRouteName='MealsFav'
+            screenOptions={{ headerShown: false, headerBackTitleVisible: false,
+                drawerActiveTintColor: Colors.accentColor,
+                drawerLabelStyle: {
+                    fontFamily:'open-sans-bold'
+                }
+             }}>
+            <Drawer.Screen name='MealsFav' component={MealsFavTabNavigator}
+                options={{ title: 'Meals' }} />
+            <Drawer.Screen name='Filters' component={FiltersNavigator}
+            />
         </Drawer.Navigator>
     )
 }
