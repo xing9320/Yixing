@@ -145,8 +145,7 @@ function FiltersNavigator() {
                         </HeaderButton>),
                         headerRight: () => (
                             <HeaderButton title="SaveFilter" onPress={() => {
-                                route.params.save
-                                //console.log("save filter", route.params.save())
+                                route.params.save()
                             }}>
                                 <Ionicons
                                     name="save"
