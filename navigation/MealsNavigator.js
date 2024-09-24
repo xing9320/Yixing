@@ -48,16 +48,16 @@ function MealsNavigator() {
             <Stack.Screen
                 name="MealDetail"
                 component={MealDetailScreen}
-                options={{
+                options={({route}) => ({
                     headerRight: () => (
-                        <HeaderButton title="Favourite" onPress={() => { }}>
+                        <HeaderButton title="Favourite" onPress={route.params.toggleFav}>
                             <Ionicons
-                                name="star-outline"
+                                name= {route.params.isFav ? "star" : "star-outline"}
                                 size={23}
                                 color={Platform.OS === 'android' ? 'white' : Colors.primaryColor} />
                         </HeaderButton>
                     )
-                }}
+                })}
             />
         </Stack.Navigator>
     )
@@ -87,6 +87,16 @@ function FavNavigator() {
             <Stack.Screen
                 name="MealDetail"
                 component={MealDetailScreen}
+                options={({route}) => ({
+                    headerRight: () => (
+                        <HeaderButton title="Favourite" onPress={route.params.toggleFav}>
+                            <Ionicons
+                                name= {route.params.isFav ? "star" : "star-outline"}
+                                size={23}
+                                color={Platform.OS === 'android' ? 'white' : Colors.primaryColor} />
+                        </HeaderButton>
+                    )
+                })}
             />
         </Stack.Navigator>
     )
@@ -97,7 +107,7 @@ const Tab = createBottomTabNavigator();
 function MealsFavTabNavigator() {
     return (
         <Tab.Navigator screenOptions={{ headerShown: false, tabBarActiveTintColor: Colors.accentColor,
-            tabBarLabelStyle: { fontFamily: 'open-sans-bold'}
+            tabBarLabelStyle: { fontFamily: 'open-sans'}
          }}>
             <Tab.Screen name='Meals' component={MealsNavigator}
                 options={{
@@ -135,7 +145,7 @@ function FiltersNavigator() {
                         </HeaderButton>),
                         headerRight: () => (
                             <HeaderButton title="SaveFilter" onPress={() => {
-                                route.params.save()
+                                route.params.save
                                 //console.log("save filter", route.params.save())
                             }}>
                                 <Ionicons

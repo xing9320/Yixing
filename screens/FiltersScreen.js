@@ -38,8 +38,6 @@ const FiltersScreen = (props) => {
 
     useEffect(() => {
         navigation.setParams({ save: saveFilters });
-        //let temp = props.route.params.save
-        //console.log("save filter", props.route.params.save)
     }, [saveFilters]);
 
     

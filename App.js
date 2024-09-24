@@ -2,8 +2,12 @@ import './gesture-handler';
 import React, { useState, useEffect, useCallback } from 'react'
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import MealsNavigator from './navigation/MealsNavigator';
 import { NavigationContainer } from '@react-navigation/native';
+import { Provider } from 'react-redux';
+
+import MealsNavigator from './navigation/MealsNavigator';
+import store from './store/store';
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,8 +46,10 @@ export default function App() {
     return null;
   }
   return (
-    <NavigationContainer onReady={onLayOutRootView}>
-      <MealsNavigator/>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer onReady={onLayOutRootView}>
+        <MealsNavigator />
+      </NavigationContainer>
+    </Provider>
   )
 }

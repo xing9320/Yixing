@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
-
-import { MEALS } from '../data/dummy-data';
+import { useSelector, useDispatch } from 'react-redux';
 import DefaultText from '../components/DefaultText';
-
+import { toggleFavorite } from '../store/actions/meals'
 const ListItem = (props) => {
     return <View style={styles.listItem}>
         <DefaultText>{props.children}</DefaultText>
@@ -11,14 +10,41 @@ const ListItem = (props) => {
 }
 
 const MealDetailScreen = (props) => {
+    const availbeMeals = useSelector(state => state.meals.meals);
     const mealId = props.route.params.mealId;
-    const selectMeal = MEALS.find(meal => meal.id === mealId);
+    const currentMealsIsFavorite = useSelector(state =>
+        state.meals.favoriteMeals.some(meal => meal.id === mealId)
+    );
+    const selectMeal = availbeMeals.find(meal => meal.id === mealId);
+    const dispatch = useDispatch();
+
+    const toggleFavoriteHandler = useCallback(() => {
+        dispatch(toggleFavorite(mealId));
+    }, [dispatch, mealId]);
 
     useEffect(() => {
         props.navigation.setOptions({
             title: selectMeal.title
-        })
-    }, [props.navigation])
+        });
+        props.navigation.setParams({ toggleFav: toggleFavoriteHandler });
+    }, [selectMeal, toggleFavoriteHandler])
+
+    useEffect (() => {
+        props.navigation.setParams({isFav: currentMealsIsFavorite});
+    },[currentMealsIsFavorite]);
+
+    useEffect(() => {
+        props.navigation.setOptions(({route}) => ({
+            headerRight: () => (
+                <HeaderButton title="Favourite" onPress={route.params.toggleFav}>
+                    <Ionicons
+                        name= {currentMealsIsFavorite ? "star" : "star-outline"}
+                        size={23}
+                        color={Platform.OS === 'android' ? 'white' : Colors.primaryColor} />
+                </HeaderButton>
+            )
+        }))
+    },[currentMealsIsFavorite])
     return (
         <ScrollView>
             <Image source={{ uri: selectMeal.imageUrl }} style={styles.image} />
@@ -30,11 +56,11 @@ const MealDetailScreen = (props) => {
             <Text style={styles.title}>Ingredients</Text>
             {selectMeal.ingredients.map(ingredient => (
                 <ListItem key={ingredient}>{ingredient}</ListItem>
-                ))}
+            ))}
             <Text style={styles.title}>Steps</Text>
             {selectMeal.steps.map(step => (
                 <ListItem key={step}>{step}</ListItem>
-                ))}
+            ))}
         </ScrollView>
     )
 }
